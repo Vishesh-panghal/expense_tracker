@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/widget/chart.dart';
 import 'package:flutter_complete_guide/widget/list.dart';
 import './models/transaction.dart';
 import 'package:flutter_complete_guide/widget/button.dart';
-import './widget/list.dart';
 
 // !To run APP..📲
 void main() => runApp(MyApp());
@@ -39,23 +39,30 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-// transitions from transition.dart file
-  // final titleController = TextEditingController();
-  // final amtcontroller = TextEditingController();
-
   final List<Transaction> _userTransaction = [
-    Transaction(
-        id: 't1', title: 'Shoes', amount: 3000.00, date: DateTime.now()),
-    Transaction(
-        id: 't2', title: 'Jacket', amount: 1200.00, date: DateTime.now()),
+    // Transaction(
+    //     id: 't1', title: 'Shoes', amount: 3000.00, date: DateTime.now()),
+    // Transaction(
+    //     id: 't2', title: 'Jacket', amount: 1200.00, date: DateTime.now()),
   ];
 
-  void _addNewTransaction(String txtitle, double txamount) {
+  List<Transaction> get _recentTransactions {
+    return _userTransaction.where((element) {
+      return element.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
+
+  void _addNewTransaction(
+      String txtitle, double txamount, DateTime chosenDate) {
     final newTnx = Transaction(
         id: DateTime.now().toString(),
         title: txtitle,
         amount: txamount,
-        date: DateTime.now());
+        date: chosenDate);
     setState(() {
       _userTransaction.add(newTnx);
     });
@@ -72,6 +79,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
@@ -92,16 +105,15 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment
-        //     .spaceAround, // it is from Top to Bottom Horizontally
         crossAxisAlignment:
             CrossAxisAlignment.stretch, // it is from Left to Right Vertically
         children: <Widget>[
           Container(
             width: double.infinity,
-            child: Card(color: Colors.blue, elevation: 10, child: Text('Card')),
+            child: Chart(_recentTransactions),
+            // child: Text('Chart'),
           ),
-          TransactionList(_userTransaction),
+          TransactionList(_userTransaction, _deleteTransaction),
         ],
       ),
       floatingActionButton: FloatingActionButton(
