@@ -26,7 +26,7 @@ class TransactionList extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColorDark,
                       // backgroundColor: Colors.amberAccent,
                     ), // amount is here..💵
                   )),
@@ -40,15 +40,11 @@ class TransactionList extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       transactions[index].title,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Text(
                       DateFormat.yMMMd().format(transactions[index].date),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.black,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     )
                   ],
                 ),
