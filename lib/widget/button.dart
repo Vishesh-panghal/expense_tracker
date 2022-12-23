@@ -94,7 +94,7 @@ class _NewTransactionState extends State<NewTransaction> {
             ),
 // ! Add transaction button..🔅
             Container(
-              margin: EdgeInsets.symmetric(vertical: 50, horizontal: 4),
+              // margin: EdgeInsets.symmetric(vertical: 50, horizontal: 4),
               child: ElevatedButton(
                   style: TextButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColorDark),

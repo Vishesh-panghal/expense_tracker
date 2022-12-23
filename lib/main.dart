@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Expense Tracker',
       theme: ThemeData(
           primarySwatch: Colors.blueGrey,
-          accentColor: Colors.amber,
+          accentColor: Colors.brown,
           fontFamily: 'Quicksand',
           textTheme: ThemeData.light().textTheme.copyWith(
               titleLarge: TextStyle(
@@ -73,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
       context: ctx,
       builder: (_) {
         return GestureDetector(
-          onTap: (() => {}),
+          onTap: (() => {
+                FocusManager.instance.primaryFocus?.unfocus(),
+              }),
           child: NewTransaction(_addNewTransaction),
           behavior: HitTestBehavior.opaque,
         );
