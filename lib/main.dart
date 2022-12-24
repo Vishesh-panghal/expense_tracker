@@ -91,31 +91,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text(
+        'Expense Tracker',
+      ),
+      actions: <Widget>[
+        IconButton(
+            onPressed: () => {_startNewTransaction(context)},
+            icon: Icon(
+              Icons.add,
+              color: Colors.white,
+            ))
+      ],
+    );
     return Scaffold(
       // just like frame for a screen
-      appBar: AppBar(
-        title: const Text(
-          'Expense Tracker',
-        ),
-        actions: <Widget>[
-          IconButton(
-              onPressed: () => {_startNewTransaction(context)},
-              icon: Icon(
-                Icons.add,
-                color: Colors.white,
-              ))
-        ],
-      ),
+      appBar: appBar,
       body: Column(
         crossAxisAlignment:
             CrossAxisAlignment.stretch, // it is from Left to Right Vertically
         children: <Widget>[
           Container(
-            width: double.infinity,
+            height: (MediaQuery.of(context).size.height -
+                    appBar.preferredSize.height -
+                    MediaQuery.of(context).padding.top) *
+                0.3,
             child: Chart(_recentTransactions),
-            // child: Text('Chart'),
           ),
-          TransactionList(_userTransaction, _deleteTransaction),
+          Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: TransactionList(_userTransaction, _deleteTransaction)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
