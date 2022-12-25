@@ -1,11 +1,19 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_complete_guide/widget/chart.dart';
 import 'package:flutter_complete_guide/widget/list.dart';
 import './models/transaction.dart';
 import 'package:flutter_complete_guide/widget/button.dart';
 
 // !To run APP..📲
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(MyApp());
+}
 
 // TODO Statefull Widget or Stateless Widget
 class MyApp extends StatelessWidget {
@@ -91,47 +99,76 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: const Text(
-        'Expense Tracker',
-      ),
-      actions: <Widget>[
-        IconButton(
-            onPressed: () => {_startNewTransaction(context)},
-            icon: Icon(
-              Icons.add,
-              color: Colors.white,
-            ))
-      ],
-    );
-    return Scaffold(
-      // just like frame for a screen
-      appBar: appBar,
-      body: Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.stretch, // it is from Left to Right Vertically
-        children: <Widget>[
-          Container(
-            height: (MediaQuery.of(context).size.height -
-                    appBar.preferredSize.height -
-                    MediaQuery.of(context).padding.top) *
-                0.3,
-            child: Chart(_recentTransactions),
-          ),
-          Container(
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text(
+              'Expense Tracker',
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () {
+                    _startNewTransaction(context);
+                  },
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            title: const Text(
+              'Expense Tracker',
+            ),
+            actions: <Widget>[
+              IconButton(
+                  onPressed: () => {_startNewTransaction(context)},
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ))
+            ],
+          );
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment:
+              CrossAxisAlignment.stretch, // it is from Left to Right Vertically
+          children: <Widget>[
+            Container(
               height: (MediaQuery.of(context).size.height -
                       appBar.preferredSize.height -
                       MediaQuery.of(context).padding.top) *
-                  0.7,
-              child: TransactionList(_userTransaction, _deleteTransaction)),
-        ],
+                  0.3,
+              child: Chart(_recentTransactions),
+            ),
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.7,
+                child: TransactionList(_userTransaction, _deleteTransaction)),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () => {_startNewTransaction(context)},
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          )),
     );
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBody,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            // just like frame for a screen
+            appBar: appBar,
+            body: pageBody,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    onPressed: () => {_startNewTransaction(context)},
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    )),
+          );
   }
 }

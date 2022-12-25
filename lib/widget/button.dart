@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
@@ -55,20 +57,43 @@ class _NewTransactionState extends State<NewTransaction> {
         margin: EdgeInsets.all(4),
         padding: EdgeInsets.all(7),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(labelText: 'Thing you buy'),
-              controller: titleController,
-              keyboardType: TextInputType.text,
-              onSubmitted: (_) => _SubmitData(),
+            Text(
+              'Entre your details:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Price'),
-              controller: amtcontroller,
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _SubmitData(),
+            SizedBox(
+              height: 35,
             ),
+            Platform.isIOS
+                ? CupertinoTextField(
+                    placeholder: 'Thing you buy',
+                    controller: titleController,
+                    onSubmitted: (_) => _SubmitData(),
+                    keyboardType: TextInputType.text,
+                  )
+                : TextField(
+                    decoration: InputDecoration(labelText: 'Thing you buy'),
+                    controller: titleController,
+                    keyboardType: TextInputType.text,
+                    onSubmitted: (_) => _SubmitData(),
+                  ),
+            SizedBox(
+              height: 25,
+            ),
+            Platform.isIOS
+                ? CupertinoTextField(
+                    placeholder: 'Price',
+                    controller: amtcontroller,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (_) => _SubmitData(),
+                  )
+                : TextField(
+                    decoration: InputDecoration(labelText: 'Price'),
+                    controller: amtcontroller,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (_) => _SubmitData(),
+                  ),
             Container(
               height: 50,
               child: Row(
@@ -81,14 +106,25 @@ class _NewTransactionState extends State<NewTransaction> {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  TextButton(
-                      onPressed: _presentDatePicker,
-                      child: Text(
-                        'Choose Date',
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
-                      )),
+                  Platform.isIOS
+                      ? CupertinoButton(
+                          onPressed: _presentDatePicker,
+                          child: Text(
+                            'Choose Date',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      : TextButton(
+                          onPressed: _presentDatePicker,
+                          child: Text(
+                            'Choose Date',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
                 ],
               ),
             ),
