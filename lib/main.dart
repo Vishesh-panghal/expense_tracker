@@ -7,7 +7,7 @@ import 'package:flutter_complete_guide/widget/list.dart';
 import './models/transaction.dart';
 import 'package:flutter_complete_guide/widget/button.dart';
 
-// !To run APP..📲
+// !To run APP..
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
